@@ -1,0 +1,13 @@
+---
+POLICY_MAP_VERSION: 0.0.2
+VERSION_DATE: '2022-05-10'
+POLICY_NAME: CHECK-OUT-OFFLINE
+POLICY_DESCRIPTION: does a CHECK-OUT for data loaded in offline mode in order to pull it from trusted archive and clear/hide relevant metadata
+LOG_FILE: rum_checkout-off.log
+LOG_LEVEL: INFO
+WATCHED_ARCHIVE: "/var/lib/archive/checkout/"
+RULES_SEQUENCE:
+  #'1': tagafile
+  '2': deletemetadata
+  '3': checkout2past
+

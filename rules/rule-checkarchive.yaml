@@ -1,0 +1,16 @@
+---
+RULE_MAP_VERSION: 0.0.2
+VERSION_DATE: '2022-05-10'
+RULE_NAME: CHECK_ARCHIVE
+ACTIONS_SEQUENCE:
+  #'1': PRE-FLY_CHECKS
+  '2': SANITY_CHECKS
+ACTION_MAP:
+  # PRE-FLY_CHECKS: preflychecks
+  SANITY_CHECKS: sanitychecks
+ACTION_RULE_CONFIG:
+  preflychecks:
+    IF_BAD_GOTO: none
+  sanitychecks:
+    NOT_MOVE: true
+    IF_BAD_GOTO: none

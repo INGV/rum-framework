@@ -1,0 +1,12 @@
+---
+POLICY_MAP_VERSION: 0.0.2
+VERSION_DATE: '2022-05-10'
+POLICY_NAME: checkin
+POLICY_DESCRIPTION: does a CHECK-IN for NEW data files in order to put it into the trusted archive
+LOG_FILE: rum_checkin.log
+LOG_LEVEL: INFO
+WATCHED_ARCHIVE: "/var/lib/archive/checkin/"
+RULES_SEQUENCE:
+  '1': filechecks
+  '2': extractmetadata
+  '3': cp2archive

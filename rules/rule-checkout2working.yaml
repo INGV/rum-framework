@@ -1,0 +1,18 @@
+---
+RULE_MAP_VERSION: 0.0.2
+VERSION_DATE: '2022-05-10'
+RULE_NAME: CHECKOUT_TO_WORKING
+ACTIONS_SEQUENCE:
+  '1': CHECKOUT_TO_WORKING
+
+ACTION_MAP:
+  CHECKOUT_TO_WORKING: checkout2working
+
+ACTION_RULE_CONFIG:
+  checkout2working:
+    ARCHIVE_TRUST: "/var/lib/archive/working/"
+    ARCHIVE_WARNING: "/var/lib/archive/warning/"
+    ARCHIVE_BAD: "/var/lib/archive/bad/"
+
+_list_available_:
+  '1': CHECKOUT_TO_WORKING
