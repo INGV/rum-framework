@@ -1,131 +1,209 @@
 # RUM Framework
 
-RUM (Rule Manager) Framework is a lightweight and modular framework designed to define, manage, and execute **policies**, **rules**, and **actions** in a clear and reusable way. It has been developed to support flexible decision-making and automated processing pipelines, with a strong focus on configurability, reuse, and separation of concerns.
+RUM (Rule Manager) Framework is a lightweight and modular engine to define, manage, and execute **policies**, **rules**, and **actions** in a configurable and reusable way, clearly separating decision logic from execution logic.
 
-The framework is described in detail in the following technical report:
+This implementation represents the core engine of the framework and is designed to support policy-driven workflows in automation, data processing, and service-oriented contexts.
 
-> *Fares M. et al.*, **INGV RUM — A Lightweight Rule Manager Framework**, Rapporti Tecnici INGV, 508, 2025. DOI: 10.13127/rpt/508
+The framework is described in detail in the technical report:
+
+> *Fares M., Carluccio I., Danecek P., et al.*
+> **INGV RUM — A Lightweight Rule Manager Framework**, Rapporti Tecnici INGV, 508 (2025).
+> DOI: 10.13127/rpt/508
 
 ---
 
 ## Motivation
 
-In many data-processing and service-oriented systems, operational logic is often hard-coded, duplicated across components, or tightly coupled to specific workflows. This makes systems difficult to adapt, maintain, and extend.
+In many complex systems, operational logic is often:
 
-RUM addresses this problem by:
+* hard-coded into application code,
+* duplicated across multiple components,
+* tightly coupled to specific workflows.
 
-* separating *decision logic* from *execution logic*,
-* enabling reuse of processing units across different scenarios,
-* allowing behavior changes through configuration rather than code changes.
+This approach makes systems hard to evolve and limits reusability.
+
+RUM addresses this problem by introducing a configuration-driven model that:
+
+* separates **decision logic** from **execution logic**,
+* allows behavior changes without code modifications,
+* promotes component reuse.
 
 ---
 
 ## Core Concepts
 
-RUM is built around three core concepts:
+RUM is based on three core concepts:
 
-* **Policies** – high-level containers that define *when* and *why* certain logic should be applied.
-* **Rules** – conditional logic units that evaluate inputs and decide *what* should happen.
-* **Actions** – executable units that define *how* something is done.
+* **Policy** – defines context and overall intent.
+* **Rule** – expresses conditional logic.
+* **Action** – represents reusable execution units.
 
-These concepts are intentionally decoupled but explicitly connected through the RUM execution model.
+These elements are orchestrated by the **sequencer**, which ensures a deterministic execution flow.
 
 ---
 
-## Policies
+## Policy
 
-A **policy** represents a coherent set of rules designed to address a specific operational or business objective.
+A **policy** is a logical container of related rules designed to represent a specific operational or functional goal.
 
 Policies:
 
 * group logically related rules,
 * define the execution scope,
-* provide a semantic layer above individual rules.
+* do not execute actions directly.
 
-A policy does not directly execute actions; instead, it orchestrates the evaluation of its rules through the RUM sequencer.
+Their role is to provide a higher semantic layer that guides the sequencer in executing the rules.
 
 ---
 
-## Rules
+## Rule
 
-A **rule** encapsulates conditional logic. It evaluates inputs, context, or system state and determines whether one or more actions should be triggered.
+A **rule** encapsulates a logical condition that is evaluated against input, context, or system state.
 
 Rules:
 
-* are evaluated sequentially by the RUM sequencer,
-* reference one or more actions,
-* can override action configurations at runtime.
+* are evaluated sequentially by the sequencer,
+* determine whether and which actions should be executed,
+* can **override action configuration**.
 
-Rules are the key mechanism that connects abstract policies to concrete execution behavior.
+The rule is the key connection point between the intent expressed by a policy and the concrete execution of actions.
 
 ---
 
-## Actions
+## Action
 
-An **action** represents a reusable execution unit. It performs a specific task, such as:
+An **action** is a reusable execution unit that performs a specific task, such as:
 
-* triggering a service,
+* invoking a service,
 * transforming data,
-* sending a notification,
-* executing a command or workflow step.
+* sending notifications,
+* executing commands or workflow steps.
 
 Actions are designed to be:
 
 * generic,
-* stateless or minimally stateful,
-* reusable across multiple rules and policies.
+* context-independent,
+* configurable through parameters.
 
-### Action Configuration and Override Mechanism
+### Configuration Override
 
-A central design principle of RUM is that **action configurations can be overridden by rules**.
+A key principle of RUM is that **action configuration can be overridden at the rule level**.
 
-This means that:
+In practice:
 
-* actions define *default* configuration parameters,
-* rules may redefine or extend these parameters when invoking an action,
-* the same action can be reused in different rules or policies with different behaviors.
+* the action defines default parameters,
+* the rule can redefine or extend these parameters,
+* the same action can be reused in multiple rules and policies with different behaviors.
 
-This override mechanism enables high reuse while avoiding duplication of action definitions.
+This mechanism prevents duplication and enables high reuse.
 
 ---
 
 ## Execution Model and Sequencer
 
-At runtime, RUM processes logic through a dedicated **sequencer**, which enforces a clear and deterministic execution flow:
+The **sequencer** is responsible for executing policies.
 
-1. A policy is selected for execution.
-2. The sequencer iterates over the rules associated with the policy.
-3. Each rule is evaluated against the current input and context.
-4. When a rule matches, the referenced actions are prepared.
-5. Action configurations are resolved, applying rule-level overrides.
-6. Actions are executed in the defined order.
+Execution flow:
+
+1. Select the policy to run
+2. Iterate over the rules defined in the policy
+3. Evaluate each rule against the current input
+4. If the rule matches:
+
+   * resolve the associated actions
+   * apply configuration overrides
+5. Execute the actions in a deterministic order
 
 This model ensures:
 
-* predictable behavior,
-* transparent decision-making,
+* predictability,
+* transparency of decision logic,
 * fine-grained control over execution.
 
 ---
 
-## Reusability and Design Principles
+## Repository Structure
 
-RUM is designed around the following principles:
+The repository structure reflects the core concepts of the framework:
 
-* **Separation of concerns**: policies decide *intent*, rules decide *conditions*, actions handle *execution*.
-* **Configuration-driven behavior**: changes in logic do not require code changes.
-* **Reusability**: actions are shared and specialized through rule-level configuration.
-* **Extensibility**: new rules and actions can be added without impacting existing ones.
+```
+├── actions/         # reusable action definitions
+├── config/          # global framework configurations
+├── modules/         # extendable modules and core components
+├── policies/        # policy definitions
+├── rules/           # rule definitions
+├── utils/           # helper functions
+└── README.md
+```
+
+---
+
+## Conceptual Example
+
+### Action (default configuration)
+
+```yaml
+name: notify_action
+parameters:
+  retries: 3
+  timeout: 30
+```
+
+### Rule (override configuration)
+
+```yaml
+name: high_priority_rule
+condition: input.priority == "high"
+actions:
+  - name: notify_action
+    override:
+      timeout: 5
+```
+
+### Policy
+
+```yaml
+name: notification_policy
+rules:
+  - high_priority_rule
+```
+
+During execution, the sequencer applies the rule's override to the action configuration before executing it.
+
+---
+
+## Project Context
+
+RUM Framework is **only the core engine**. It requires a concrete **project** to provide rules, policies, actions, and input data to process. Without a project context, the engine does not produce any output.
+
+For example, the **Curation project** (or any other project) provides:
+
+* the set of policies and rules to apply
+* configuration of actions
+* input data or workflow triggers
+
+This separation allows RUM to remain flexible, reusable, and independent from specific use cases.
+
+---
+
+## Design Principles
+
+RUM is built on the following principles:
+
+* **Separation of concerns**: policies, rules, and actions have distinct responsibilities.
+* **Configuration-driven behavior**: system behavior is defined via configuration.
+* **Reusability**: actions are reusable and customizable.
+* **Extensibility**: new rules and actions can be added without modifying the core engine.
 
 ---
 
 ## Project Status
 
-🚧 Research and engineering framework. APIs and configuration models may evolve.
+🚧 Research and engineering framework. Configuration models and APIs may evolve.
 
 ---
 
-## Related Resources
+## References
 
-* Technical report: *INGV RUM — A Lightweight Rule Manager Framework* (Rapporti Tecnici INGV 508)
-* Organization: [https://github.com/INGV](https://github.com/INGV)
+* *INGV RUM — A Lightweight Rule Manager Framework*, Rapporti Tecnici INGV 508 (2025), DOI: 10.13127/rpt/508
+* [https://github.com/INGV](https://github.com/INGV)
