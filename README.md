@@ -174,13 +174,14 @@ During execution, the sequencer applies the rule's override to the action config
 
 ## Project Context
 
-RUM Framework is **only the core engine**. It requires a concrete **project** to provide rules, policies, actions, and input data to process. Without a project context, the engine does not produce any output.
+RUM Framework is **only the core engine**. It requires a concrete **project** to provide rules, policies, actions. 
+Without a project context, the engine does not produce any output.
 
-For example, the **Curation project** (or any other project) provides:
+For example, the **Curation project** ([RUM Project](https://github.com/INGV/rum-project) ) provides:
 
 * the set of policies and rules to apply
 * configuration of actions
-* input data or workflow triggers
+
 
 This separation allows RUM to remain flexible, reusable, and independent from specific use cases.
 
@@ -197,13 +198,9 @@ RUM is built on the following principles:
 
 ---
 
-## Project Status
-
-🚧 Research and engineering framework. Configuration models and APIs may evolve.
-
 ---
 
 ## References
 
-* *INGV RUM — A Lightweight Rule Manager Framework*, Rapporti Tecnici INGV 508 (2025), DOI: 10.13127/rpt/508
-* [https://github.com/INGV](https://github.com/INGV)
+* *INGV RUM — A Lightweight Rule Manager Framework*, Rapporti Tecnici INGV 508 (2025), DOI: [10.13127/rpt/508](https:doi.org/10.13127/rpt/508)
+* [RUM Project](https://github.com/INGV/rum-project) - Project Curation implementation
