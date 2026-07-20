@@ -13,15 +13,15 @@ The framework is described in detail in the technical report:
 
 # RUM: Design Philosophy
 
-> *Keep the framework simple. Let the Policies do the work.*
+> *Keep the framework simple. Let the policies do the work.*
 
 RUM was developed to address a practical challenge commonly faced by Research Infrastructures (RIs): software systems often remain operational for many years, while the people maintaining them continuously change.
 
 New developers join the team, experienced developers move to different projects, students become researchers, and responsibilities evolve over time. In this environment, software sustainability depends not only on functionality or performance, but also on how easily the system can be understood, maintained, and extended.
 
-**simplicity is not a limitation of RUM**
+**Simplicity is not a limitation of RUM**
 
-**it is one of its fundamental design principles.**
+**It is one of its fundamental design principles.**
 
 ## The Bicycle Principle
 >
@@ -31,9 +31,9 @@ New developers join the team, experienced developers move to different projects,
 >  <img src="images/RUM-bicycle-approach.png" width="420">
 > </p>
 >
-> <p align="center"> RUM is intentionally designed to remain simple.
-> Complexity belongs to Policies, Rules and Actions,</p>
-> <p align="center">not to the framework itself.</p>
+> <p align="center"> RUM is intentionally designed to remain simple.</p>
+> <p align="center">Complexity belongs to projects built on top of RUM, 
+> not to the framework itself.</p>
 
 The design philosophy behind RUM can be summarized with a simple metaphor.
 
@@ -64,6 +64,8 @@ Instead, it should be expressed where it naturally belongs:
 - Context describes the operational conditions under which the execution takes place.
 
 The framework does not implement business logic. It simply orchestrates reusable components.
+
+Projects provide the behaviour; the framework provides the orchestration.
 
 ## A Design Principle
 
@@ -201,18 +203,40 @@ This model ensures:
 
 ## Repository Structure
 
-The repository structure reflects the core concepts of the framework:
+RUM is organized into two independent repositories:
+
+- the **RUM Framework**, which provides the generic execution engine;
+- a **Project**, which provides the domain-specific components (Policies, Rules, Actions, Contexts, etc.).
+
+The framework is intentionally independent from any specific application. A Project repository is cloned into the `project/` directory and supplies all the elements required to execute a concrete workflow.
+
+> RUM intentionally separates the execution engine from project-specific logic.
 
 ```
-├── actions/         # reusable action definitions
-├── config/          # global framework configurations
-├── modules/         # extendable modules and core components
-├── policies/        # policy definitions
-├── rules/           # rule definitions
-├── contexts/        # context definitions
-├── utils/           # helper functions
-└── README.md
+RUM Framework
+│
+├── build/          # build scripts and packaging
+├── core/           # framework core components (sequencer, engine, session, ...)
+├── example/        # example projects and tutorials
+├── images/         # documentation images
+├── log/            # log directory (placeholder)
+├── utils/          # framework utility functions
+├── README.md
+└── project/        # project workspace (external repository)
+    │
+    ├── actions/    # project-specific Actions
+    ├── config/     # Action configurations
+    ├── contexts/   # execution Context definitions
+    ├── modules/    # project-specific modules
+    ├── policies/   # Policy definitions
+    ├── rules/      # Rule definitions
+    ├── utils/      # project utility functions
+    └── README.md
 ```
+
+The `project/` directory is intentionally left empty in the framework repository. Users should clone a compatible Project repository into this directory before running RUM.
+
+This separation allows the framework to remain generic while enabling multiple independent projects to reuse the same execution engine.
 
 ---
 
@@ -254,7 +278,7 @@ During execution, the sequencer applies the rule's override to the action config
 
 RUM Framework is **only the core engine**. It requires a concrete **project** to provide rules, policies, actions, and input data to process. Without a project context, the engine does not produce any output.
 
-For example, the **Curation project** (or any other project) provides:
+For example, the [**Curation project**](https://github.com/INGV/rum-project) (or any other project) provides:
 
 * the set of policies and rules to apply
 * configuration of actions
@@ -268,7 +292,7 @@ This separation allows RUM to remain flexible, reusable, and independent from sp
 
 ## Context
 
-Starting from version 1.2, RUM introduces the concept of **Context**.
+RUM introduces the concept of **Context**.
 
 A Context is a read-only collection of execution-specific information shared by all Actions during a processing session.
 
@@ -307,6 +331,7 @@ RUM is built on the following principles:
 * **Configuration-driven behavior**: system behavior is defined via configuration.
 * **Reusability**: actions are reusable and customizable.
 * **Extensibility**: new rules and actions can be added without modifying the core engine.
+* **Simplicity by design**: whenever possible, new functionality should be implemented by extending projects rather than increasing the complexity of the framework.
 
 
 
