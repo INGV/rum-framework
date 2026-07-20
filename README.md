@@ -9,6 +9,81 @@ The framework is described in detail in the technical report:
 > *Fares M., Carluccio I., Danecek P., et al.*
 > **INGV RUM — A Lightweight Rule Manager Framework**, Rapporti Tecnici INGV, 508 (2025).
 > DOI: 10.13127/rpt/508
+ 
+
+# RUM: Design Philosophy
+
+> *Keep the framework simple. Let the Policies do the work.*
+
+RUM was developed to address a practical challenge commonly faced by Research Infrastructures (RIs): software systems often remain operational for many years, while the people maintaining them continuously change.
+
+New developers join the team, experienced developers move to different projects, students become researchers, and responsibilities evolve over time. In this environment, software sustainability depends not only on functionality or performance, but also on how easily the system can be understood, maintained, and extended.
+
+**simplicity is not a limitation of RUM**
+
+**it is one of its fundamental design principles.**
+
+## The Bicycle Principle
+>
+>
+> 
+> <p align="center">
+>  <img src="images/RUM-bicycle-approach.png" width="420">
+> </p>
+>
+> <p align="center"> RUM is intentionally designed to remain simple.
+> Complexity belongs to Policies, Rules and Actions,</p>
+> <p align="center">not to the framework itself.</p>
+
+The design philosophy behind RUM can be summarized with a simple metaphor.
+
+**RUM is intentionally designed to be a bicycle.** 🚲
+
+A bicycle is not the fastest vehicle, nor the most sophisticated one. However, almost everyone can understand how it works, repair it, and continue using it for decades.
+
+The same philosophy guides the development of RUM.
+
+The framework itself should remain:
+
+- small;
+- readable;
+- understandable;
+- maintainable;
+- predictable;
+- easy to extend.
+
+The framework should remain intentionally simple.
+
+Complexity belongs to projects built on top of RUM, not to the framework itself.
+
+Instead, it should be expressed where it naturally belongs:
+
+- Policies describe **what** should happen.
+- Rules organize **how** the workflow is executed.
+- Actions implement the domain-specific logic.
+- Context describes the operational conditions under which the execution takes place.
+
+The framework does not implement business logic. It simply orchestrates reusable components.
+
+## A Design Principle
+
+When introducing a new feature, the first question should never be:
+
+> *"Can this feature be implemented as a Policy, Rule or Action instead of modifying the framework?"*
+
+Instead, the question should be:
+
+> **"Can this be implemented without making the bicycle more complicated?"**
+
+If the answer is yes, the framework is evolving in the intended direction.
+
+If implementing a feature requires increasing the complexity of the framework itself, the design should be reconsidered.
+
+Keeping the framework simple is considered more important than adding sophisticated architectural mechanisms.
+
+This principle has guided the development of RUM from the beginning and is expected to remain valid for future evolutions of the framework.
+
+RUM was intentionally designed around the operational reality of Research Infrastructures, where software often outlives the people who originally developed it.
 
 ---
 
@@ -39,6 +114,8 @@ RUM is based on three core concepts:
 * **Action** – represents reusable execution units.
 
 These elements are orchestrated by the **sequencer**, which ensures a deterministic execution flow.
+
+While Policies, Rules and Actions define the execution model, a **Context** can optionally provide execution-specific information shared by all Actions during a processing session.
 
 ---
 
@@ -132,6 +209,7 @@ The repository structure reflects the core concepts of the framework:
 ├── modules/         # extendable modules and core components
 ├── policies/        # policy definitions
 ├── rules/           # rule definitions
+├── contexts/        # context definitions
 ├── utils/           # helper functions
 └── README.md
 ```
@@ -174,16 +252,50 @@ During execution, the sequencer applies the rule's override to the action config
 
 ## Project Context
 
-RUM Framework is **only the core engine**. It requires a concrete **project** to provide rules, policies, actions. 
-Without a project context, the engine does not produce any output.
+RUM Framework is **only the core engine**. It requires a concrete **project** to provide rules, policies, actions, and input data to process. Without a project context, the engine does not produce any output.
 
-For example, the **Curation project** ([RUM Project](https://github.com/INGV/rum-project) ) provides:
+For example, the **Curation project** (or any other project) provides:
 
 * the set of policies and rules to apply
 * configuration of actions
-
+* input data or workflow triggers
 
 This separation allows RUM to remain flexible, reusable, and independent from specific use cases.
+
+---
+
+---
+
+## Context
+
+Starting from version 1.2, RUM introduces the concept of **Context**.
+
+A Context is a read-only collection of execution-specific information shared by all Actions during a processing session.
+
+Unlike **Policies**, **Rules**, and **Actions**, which define *what* should happen and *how* it should be executed, the Context describes *under which operational conditions* the execution takes place.
+
+Typical information stored in a Context includes:
+
+- issue or ticket identifiers;
+- requesting organization;
+- operator information;
+- provenance metadata associated with versioning;
+- execution options;
+- project-specific parameters.
+
+The Context is loaded once during the RUM bootstrap phase and remains immutable throughout the execution. Every Action can access it, while none is allowed to modify it.
+
+This design keeps execution metadata separated from both the framework logic and the domain-specific logic implemented by Actions.
+
+The Context is **not another configuration file**. It does not change the behaviour of the framework; instead, it describes the operational environment in which a Policy is executed.
+
+> **Design Rule**
+>
+> The Context should describe the execution environment, never the execution logic.
+>
+> If a parameter changes *how* the framework behaves, it probably belongs to a **Policy**, a **Rule**, or an **Action**.
+>
+> If it describes *who*, *why*, or *under which conditions* a processing is performed, it belongs to the **Context**.
 
 ---
 
@@ -196,11 +308,12 @@ RUM is built on the following principles:
 * **Reusability**: actions are reusable and customizable.
 * **Extensibility**: new rules and actions can be added without modifying the core engine.
 
----
+
 
 ---
 
 ## References
 
-* *INGV RUM — A Lightweight Rule Manager Framework*, Rapporti Tecnici INGV 508 (2025), DOI: [10.13127/rpt/508](https:doi.org/10.13127/rpt/508)
-* [RUM Project](https://github.com/INGV/rum-project) - Project Curation implementation
+* *INGV RUM — A Lightweight Rule Manager Framework*, Rapporti Tecnici INGV 508 (2025), DOI: 10.13127/rpt/508
+
+
