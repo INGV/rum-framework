@@ -1,5 +1,11 @@
 # RUM Framework
 
+ 
+ <p align="center">
+  <img src="images/RUM-good-to-drink.png" width="420">
+ </p>
+
+
 RUM (Rule Manager) Framework is a lightweight and modular engine to define, manage, and execute **policies**, **rules**, and **actions** in a configurable and reusable way, clearly separating decision logic from execution logic.
 
 This implementation represents the core engine of the framework and is designed to support policy-driven workflows in automation, data processing, and service-oriented contexts.
