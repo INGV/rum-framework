@@ -29,7 +29,7 @@ New developers join the team, experienced developers move to different projects,
 
 **It is one of its fundamental design principles.**
 
-## The Bicycle Principle
+## The Bicycle Approach
 >
 >
 > 
@@ -45,9 +45,15 @@ The design philosophy behind RUM can be summarized with a simple metaphor.
 
 **RUM is intentionally designed to be a bicycle.** 🚲
 
+The goal is not to build the most sophisticated framework.
+
+The goal is to build one that people can still understand, repair, and extend many years after it was originally written.
+
 A bicycle is not the fastest vehicle, nor the most sophisticated one. However, almost everyone can understand how it works, repair it, and continue using it for decades.
 
 The same philosophy guides the development of RUM.
+
+> For more details about this design philosophy, see **[The Bicycle Approach](BICYCLE.md)**.
 
 The framework itself should remain:
 
@@ -71,7 +77,7 @@ Instead, it should be expressed where it naturally belongs:
 
 The framework does not implement business logic. It simply orchestrates reusable components.
 
-Projects provide the behaviour; the framework provides the orchestration.
+Projects provide the behavior; the framework provides the orchestration.
 
 ## A Design Principle
 
@@ -347,4 +353,8 @@ RUM is built on the following principles:
 
 * *INGV RUM — A Lightweight Rule Manager Framework*, Rapporti Tecnici INGV 508 (2025), DOI: 10.13127/rpt/508
 
+---
 
+> 🚲 **This framework follows the Bicycle Approach.**
+>
+> Before modifying the core framework, consider reading **[BICYCLE.md](BICYCLE.md)**.
