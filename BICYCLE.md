@@ -3,21 +3,29 @@
 
 ### Designing for 50 Years
 
-The Viking missions landed on Mars in 1976.
-Their onboard computers had only a few kilobytes of memory and a fraction of the computing power available in even the simplest devices today.
+Voyager 1 was launched in 1977.
 
-Yet, decades later, the observations they produced are still valuable.
+Its onboard computer was tiny by modern standards, yet nearly fifty years later it is still communicating with Earth from interstellar space.
 
-The technology that produced them has become obsolete. 
+Its longevity was not achieved through powerful technology.
+It was achieved through simple, reliable engineering.
 
-The information has not.
+The Bicycle Approach is built on the same principle.
 
-This raises a simple question:
+Build software that can evolve for decades without forcing every new generation to reinvent it.
 
-If scientific information can outlive the technology that created it by half a century, shouldn't we design today's systems with the same time horizon?
+This raises a simple question.
 
-The Bicycle approach is founded on this premise.
-Instead of binding information to today's software stacks, storage technologies, or APIs, it treats information as the long-lived asset and technology as a replaceable implementation.
+If scientific information can outlive the technology that created it by half a century, shouldn't we design today's software with the same time horizon?
+
+The Bicycle Approach is founded on a simple premise.
+
+Information is the long-lived asset.
+Technology is only its current vehicle.
+
+Instead of binding information to today's software stacks, storage technologies, cloud providers, or APIs, the Bicycle Approach treats every implementation as replaceable while preserving the information itself.
+
+Technology will evolve.
 
 * Hardware will change.
 * Operating systems will change.
@@ -26,6 +34,12 @@ Instead of binding information to today's software stacks, storage technologies,
 * Software frameworks will change.
 
 Information should not have to change with them.
+
+Software has a lifecycle.
+
+Information has a legacy.
+
+Design for the legacy, not the lifecycle.
 
 <p align="center">
   <img src="images/RUM-bicycle-manual.png" width="900">
