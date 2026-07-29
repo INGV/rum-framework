@@ -1,0 +1,44 @@
+# ===============================
+# SDS DISTRIBUTOR CONFIG
+# ===============================
+
+sds:
+  root: /mnt/archive
+  default_year: auto        # auto = yesterday
+  default_jday: auto        # auto = yesterday | number | all
+
+filters:
+  network: null
+  station: null
+  channel: null
+
+workers:
+  base_dir: /data/test-archive/checkin
+  count: 10
+  max_files_per_dir: 2 #5
+  retry_sleep_sec: 5
+  max_copy_retries: 35
+  global_timeout_sec: 3600   # 1 hour
+  container_prefix: rum-curation-offline
+
+producer:
+  sleep_sec: 0.2
+
+error_handling:
+  error_dir: /data/test-archive/load-error
+  recovery_dir: /data/test-archive/load-recovery
+
+parallel:
+  threads: 5 # 15
+
+runtime:
+  lock_file: /tmp/sds_distributor.lock
+
+logging:
+  log_file: /data/test-archive/log/distributor/sds_distributor.log
+  level: DEBUG
+
+email:
+  enabled: false
+  to: your_email@example.com/data/test-archive/log/
+
