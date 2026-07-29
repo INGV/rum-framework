@@ -1,15 +1,41 @@
 # The Bicycle Approach 
 ## A design philosophy for sustainable software in Research Infrastructures
 
+### Designing for 50 Years
+
+The Viking missions landed on Mars in 1976.
+Their onboard computers had only a few kilobytes of memory and a fraction of the computing power available in even the simplest devices today.
+
+Yet, decades later, the observations they produced are still valuable.
+
+The technology that produced them has become obsolete. 
+
+The information has not.
+
+This raises a simple question:
+
+If scientific information can outlive the technology that created it by half a century, shouldn't we design today's systems with the same time horizon?
+
+The Bicycle approach is founded on this premise.
+Instead of binding information to today's software stacks, storage technologies, or APIs, it treats information as the long-lived asset and technology as a replaceable implementation.
+
+* Hardware will change.
+* Operating systems will change.
+* Programming languages will change.
+* Cloud providers will change.
+* Software frameworks will change.
+
+Information should not have to change with them.
+
 <p align="center">
   <img src="images/RUM-bicycle-manual.png" width="900">
 </p>
 
 The Bicycle Approach is the design philosophy behind the [RUM Framework](README.md).
 
-It was inspired by a simple observation.
+It originated from a simple observation.
 
-Research Infrastructures often operate software systems for decades, while the people maintaining them continuously change. New developers join the team, experienced developers move to other projects, students become researchers, and knowledge is gradually transferred over time.
+Research Infrastructures often operate software systems for decades, while the people maintaining them continuously change.
 
 > Research Infrastructures require software architectures whose complexity remains proportional to the long-term maintainability of the organization.
 
@@ -17,11 +43,13 @@ In this environment, software sustainability depends not only on technology, but
 
 For this reason, the framework itself should remain intentionally simple.
 
-Like a bicycle, it should be understandable by almost everyone, easy to repair, and capable of serving its purpose for many years.
+Like a bicycle, it should be understandable by anyone, easy to repair, and capable of serving its purpose for many years.
 
-The complexity of the application should live in the project—not in the framework.
+The complexity of the application should live in the project — not in the framework.
 
-The following design principles summarize this philosophy.
+Designing software that can support long-lived information requires a different engineering mindset. 
+
+The following principles summarize that mindset.
 
 ### 1. The Framework is the Bicycle
 
@@ -50,6 +78,8 @@ If behavior can be expressed through configuration, avoid modifying Python code.
 
 **Modules** encapsulate reusable logic.
 
+**Contexts** provide shared information.
+
 The framework orchestrates them.
 
 
@@ -57,15 +87,24 @@ The framework orchestrates them.
 
 Never infer user intentions if they can be expressed explicitly.
 
-```
-Good
+Good:
 
-ENABLED: true`
-```
+```yaml
+retry: 3
+timeout: 30
+enabled: true
 ```
 Less good:
 
- if everything_is_null():
+```python
+
+
+if timeout is None:
+    timeout = default_timeout()
+
+if retries < 0:
+    retries = DEFAULT_RETRIES
+...
  
 ``` 
 
@@ -121,7 +160,7 @@ Can this feature be implemented as a Policy, Rule, Action or Context instead of 
 
 ### Bicycle Test #3 — Longevity
 
-Will this still be understandable in five years?
+Will this still be understandable after the original developers have left?
 
 ### Bicycle Test #4 — Premature Abstraction
 
@@ -149,4 +188,4 @@ For Research Infrastructures, this is not a limitation.
 
 The Bicycle Approach is not about writing less software.
 
-It is about writing software that lasts longer.
+It is about building software that enables information to survive technological change.
