@@ -45,7 +45,7 @@ Design for the legacy, not the lifecycle.
   <img src="images/RUM-bicycle-manual.png" width="900">
 </p>
 
-The Bicycle Approach is the design philosophy behind the [RUM Framework](README.md).
+The Bicycle Approach is the design philosophy behind the [RUM Framework](README.md) and [PID-LAND](https://github.com/INGV/pid-land).
 
 It originated from a simple observation.
 
